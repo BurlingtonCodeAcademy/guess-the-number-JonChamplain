@@ -17,14 +17,30 @@ async function start() {
 
   console.log("\nLet's play a game where you (human) make up a number and I (computer) try to guess it.\nBefore you choose a number, tell me the range I should guess in.")
 
-  let rangeMin = parseInt(await ask("Enter the lowest number in the range: "), 10)
-  let rangeMax = parseInt(await ask("Enter the highest number in the range: "), 10)
-  let secretNumber = await ask("What is your secret number? I won't peek, I promise...\nEnter your number: ");
+  let rangeMin = NaN
+  let rangeMax = NaN
+  let secretNumber = NaN
+  // Variables are set to NaN to help with the type-check loops
+
+  while (isNaN(rangeMin) === true) {
+  rangeMin = await ask("Enter the lowest number in the range: ")
+  }
+  while (isNaN(rangeMax) === true) {
+  rangeMax = await ask("Enter the highest number in the range: ")
+  }
+  while (isNaN(secretNumber) === true) {
+  secretNumber = await ask("What is your secret number? I won't peek, I promise...\nEnter your number: ")
+  }
+  // Starts the game and has the user define the range they want the computer to guess within
+  // and what number they want the computer to guess.
+  // Uses while loop to make sure user inputs a real number and prevents errors from typos
+
+  rangeMin = parseInt(rangeMin , 10)
+  rangeMax = parseInt(rangeMax , 10)
+  // Turns the strings of numbers into true numbers
+
   console.log('\nYou entered: ' + secretNumber + '\nPlease remember your number! I will know if you cheated!');
   console.log("I'll guess a number between " + rangeMin + " and " + rangeMax + ".")
-  // Starts the game and has the user define the range they want the computer
-  // to guess within, and then define the number they want the computer to guess.
-  // Uses parseInt to make sure we don't get strings of numbers
 
   let userAnswer = 'n' // Stores if the user answers "y" or "n" to the guess, is "n" by default
   let computerGuess = null // Variable for what the computer will guess, is null by default
@@ -49,10 +65,11 @@ async function start() {
     guessNum++ // Keeps track of how many guesses the computer has made
 
     if (rangeSpread === 0 && userAnswer === 'n') {
-      console.log('\nCHEATER!'.repeat(100))
-      process.exit();
+      while (true){
+        console.log('CHEATER!');
+      }
     }
-    //Checks if user is cheating after their answer, and exits the program if they are
+    //Checks if user is cheating after their answer, and ruins their terminal if they are
 
     if (userAnswer === 'n') {
       hiOrLow = await ask('\nIs your number higher or lower?\nEnter "h" or "l": ');
